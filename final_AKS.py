@@ -33,12 +33,32 @@ CONFIG = {
     'STATIC_DIR': os.path.join(os.getcwd(), "static"),
     'JSON_FILE_PATH': os.path.join(os.getcwd(), "salesforce_data.json"),
     'PORT': int(os.getenv("PORT", 8000)),
-    'API_KEY': os.getenv("API_KEY", "tX9vL2kQwRtY7uJmK3vL8nWcXe5HgH3v"),
-    'HOST_URL': os.getenv("HOST_URL", "http://localhost:8000"),
+    'API_KEY': os.getenv("API_KEY"),
+    'HOST_URL': os.getenv("HOST_URL"),
     'POSTMAN_ENDPOINT': os.getenv("POSTMAN_ENDPOINT", "https://c89496b5-c613-41c4-b6f9-ae647d74262b.mock.pstmn.io/screenshot"),
-    'BROWSER_TIMEOUT': int(os.getenv("BROWSER_TIMEOUT", 300))
+    'BROWSER_TIMEOUT': int(os.getenv("BROWSER_TIMEOUT", 300)),
+    'ALLOW_UNAUTHENTICATED_SALESFORCE': os.getenv("ALLOW_UNAUTHENTICATED_SALESFORCE", "false").lower() == "true",
+    'SALESFORCE_ENDPOINT': os.getenv("SALESFORCE_ENDPOINT"),
+    'SALESFORCE_CLIENT_ID': os.getenv("SALESFORCE_CLIENT_ID"),
+    'SALESFORCE_CLIENT_SECRET': os.getenv("SALESFORCE_CLIENT_SECRET"),
+    'SALESFORCE_USERNAME': os.getenv("SALESFORCE_USERNAME"),
+    'SALESFORCE_PASSWORD': os.getenv("SALESFORCE_PASSWORD"),
+    'SALESFORCE_TOKEN': os.getenv("SALESFORCE_TOKEN"),
+    'SALESFORCE_CALLBACK_URL': os.getenv("SALESFORCE_CALLBACK_URL"),
+    'AZURE_STORAGE_ACCOUNT_NAME': os.getenv("AZURE_STORAGE_ACCOUNT_NAME", "formfillscreenshots"),
+    'AZURE_ACCESS_KEY': os.getenv("AZURE_ACCESS_KEY"),
+    'AZURE_CONTAINER_NAME': os.getenv("AZURE_CONTAINER_NAME", "payload"),
 }
 
+# Validate required environment variables
+required_env_vars = [
+    'AZURE_STORAGE_ACCOUNT_NAME', 'AZURE_ACCESS_KEY', 'AZURE_CONTAINER_NAME','SALESFORCE_ENDPOINT',
+    'SALESFORCE_CLIENT_ID', 'SALESFORCE_CLIENT_SECRET', 'SALESFORCE_USERNAME', 'SALESFORCE_PASSWORD', 'API_KEY','SALESFORCE_TOKEN',
+    'SALESFORCE_CALLBACK_URL'
+]
+missing_vars = [var for var in required_env_vars if not CONFIG[var]]
+if missing_vars:
+    raise RuntimeError(f"Missing required environment variables: {', '.join(missing_vars)}")
 # Setup
 os.makedirs(CONFIG['STATIC_DIR'], exist_ok=True)
 logging.basicConfig(level=logging.INFO)
